@@ -1,15 +1,34 @@
 package com.krisped;
 
 import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import java.awt.Window;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import net.runelite.client.ui.PluginPanel;
 
 public class PluginCreatorPanel extends PluginPanel {
-	public PluginCreatorPanel() {
-		super(false); // no wrap
-		setLayout(new BorderLayout());
-		JLabel title = new JLabel("Plugin Creator", SwingConstants.CENTER);
-		add(title, BorderLayout.NORTH);
-	}
+    private final PresetService presetService;
+    private final JButton createNewBtn;
+    private final JPanel center;
+
+    public PluginCreatorPanel(PresetService presetService) {
+        this.presetService = presetService;
+        setLayout(new BorderLayout());
+
+        // Center panel
+        center = new JPanel();
+
+        // Create New button
+        createNewBtn = new JButton("Create New");
+        createNewBtn.addActionListener(e -> {
+            Window owner = SwingUtilities.getWindowAncestor(this);
+            CreateNewDialog dialog = new CreateNewDialog(owner, presetService);
+            dialog.setLocationRelativeTo(null); // center on screen
+            dialog.setVisible(true);
+        });
+
+        center.add(createNewBtn);
+        add(center, BorderLayout.CENTER);
+    }
 }

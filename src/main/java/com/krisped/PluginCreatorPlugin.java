@@ -31,15 +31,20 @@ public class PluginCreatorPlugin extends Plugin
 	@Inject
 	private ClientToolbar clientToolbar;
 
+	@Inject
+	private ConfigManager configManager;
+
 	private NavigationButton navButton;
 	private PluginCreatorPanel panel;
+	private PresetService presetService;
 
 	@Override
 	protected void startUp() throws Exception
 	{
 		log.info("Example started!");
 
-		panel = new PluginCreatorPanel();
+		presetService = new PresetService(configManager);
+		panel = new PluginCreatorPanel(presetService);
 		final BufferedImage icon = ImageUtil.loadImageResource(getClass(), "/com/krisped/icons/plugincreator.png");
 
 		navButton = NavigationButton.builder()
@@ -62,6 +67,7 @@ public class PluginCreatorPlugin extends Plugin
 			navButton = null;
 		}
 		panel = null;
+		presetService = null;
 	}
 
 	@Subscribe
